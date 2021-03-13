@@ -2,7 +2,9 @@ import React, {Component} from "react";
 import "./index.css";
 
 export default class Cart extends Component {
-
+    constructor(props){
+        super(props);
+    }
     render() {
         return (
             <div className="card my-16 mr-25 flex-30">
@@ -26,15 +28,14 @@ export default class Cart extends Component {
                                     key={idx + 1}
                                     className="slide-up-fade-in">
                                     <td>{idx + 1}.</td>
-                                    <td className="name" data-testid="cart-item-name">{cartItem.item}</td>
+                                    <td className="name" data-testid="cart-item-name">{cartItem.name}</td>
                                     <td className="numeric quantity" data-testid="cart-item-quantity">
-                                        {cartItem.quantity}
+                                        {cartItem.cartQuantity}
                                     </td>
                                 </tr>
                             )
                         })
                     }
-
                     </tbody>
                 </table>
             </div>

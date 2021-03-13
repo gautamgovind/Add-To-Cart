@@ -2,8 +2,27 @@ import React, {Component} from "react";
 import "./index.css";
 
 export default class ProductList extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        this.state = {
+            cartItemCount: 0,
+            cartList: props.currentList,
+            cartItem: 0
+        }
+    }
+
+    addItem = (product)=>{
+        let newCartList = [...this.state.cartList];
+        if(newCartList.includes(product)) {
+            newCartList[`${product.id}`].cartQuantity +=1;
+        } else {
+            newCartList.push(product);
+        }
+        
+        this.setState({
+            cartList: newCartList
+        });
+        this.props.updateList(newCartList);        
     }
 
     render() {
@@ -22,19 +41,21 @@ export default class ProductList extends Component {
                                     <p className="ma-0 mt-8 text-center">${product.price}</p>
                                 </div>
                                 <div className="card-actions justify-content-center pa-4">
-
-                                    <button className="x-small outlined" data-testid="btn-item-add">
+                                    <button className="x-small outlined" data-testid="btn-item-add" 
+                                        onClick={()=>this.addItem(product)} >
                                         Add To Cart
                                     </button>
 
                                     <div className="layout-row justify-content-between align-items-center">
                                         <button className="x-small icon-only outlined"
-                                                data-testid="btn-quantity-subtract">
+                                                data-testid="btn-quantity-subtract"
+                                                 >
                                             <i className="material-icons">remove</i>
                                         </button>
 
                                         <input type="number"
                                                disabled
+                                               value={product.cartQuantity}
                                                className="cart-quantity" data-testid="cart-quantity"/>
 
                                         <button className="x-small icon-only outlined"

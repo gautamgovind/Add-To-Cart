@@ -23,13 +23,20 @@ class App extends Component {
         }
     }
 
+    updateList = list=>{
+        this.setState(prevState=>({
+            cart:{
+                ...prevState.cart, items: list
+            }
+        }))
+    }
 
     render() {
         return (
             <div>
                 <h8k-navbar header={title}></h8k-navbar>
                 <div className="layout-row shop-component">
-                    <ProductList products={this.state.products}/>
+                    <ProductList products={this.state.products} currentList = {this.state.cart.items} updateList={list=>this.updateList(list)}/>
                     <Cart cart={this.state.cart}/>
                 </div>
             </div>
