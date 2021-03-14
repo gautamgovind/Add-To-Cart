@@ -13,16 +13,38 @@ export default class ProductList extends Component {
 
     addItem = (product)=>{
         let newCartList = [...this.state.cartList];
-        if(newCartList.includes(product)) {
-            newCartList[`${product.id}`].cartQuantity +=1;
+        let dataArr =[];
+        !newCartList.length && newCartList.push(product);
+        if (newCartList.includes(product)) {
+            newCartList.map((item) => {
+                if (item["id"] ===  product.id ) {
+                    item["cartQuantity"] +=1;
+                }
+            })
         } else {
+            product.cartQuantity = 1;
             newCartList.push(product);
         }
-        
         this.setState({
             cartList: newCartList
         });
         this.props.updateList(newCartList);        
+    }
+
+    removeItem = (product)=>{
+        const newCartList = [...this.state.cartList];
+        newCartList.map((item, i)=>{
+            if (item["id"] ===  product.id ) {
+                item["cartQuantity"] -=1;
+            } 
+            if(item["cartQuantity"]===0) {
+                newCartList.splice(i,1);
+            }
+        })
+        this.setState({
+            cartList: newCartList
+        });
+        this.props.updateList(newCartList);
     }
 
     render() {
@@ -41,15 +63,17 @@ export default class ProductList extends Component {
                                     <p className="ma-0 mt-8 text-center">${product.price}</p>
                                 </div>
                                 <div className="card-actions justify-content-center pa-4">
+                                    {product.cartQuantity===0 &&
                                     <button className="x-small outlined" data-testid="btn-item-add" 
                                         onClick={()=>this.addItem(product)} >
                                         Add To Cart
                                     </button>
-
+                                    }
+                                    {product.cartQuantity!==0 && 
                                     <div className="layout-row justify-content-between align-items-center">
                                         <button className="x-small icon-only outlined"
                                                 data-testid="btn-quantity-subtract"
-                                                 >
+                                                onClick={()=>this.removeItem(product)} >
                                             <i className="material-icons">remove</i>
                                         </button>
 
@@ -59,11 +83,12 @@ export default class ProductList extends Component {
                                                className="cart-quantity" data-testid="cart-quantity"/>
 
                                         <button className="x-small icon-only outlined"
-                                                data-testid="btn-quantity-add">
+                                                data-testid="btn-quantity-add"
+                                                onClick={()=>this.addItem(product)} >
                                             <i className="material-icons">add</i>
                                         </button>
                                     </div>
-
+                                    }
                                 </div>
                             </div>
                         </section>
